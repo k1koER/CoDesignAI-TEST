@@ -32,8 +32,12 @@ const moduleInfo = {
     }
 };
 
+// 後端 API 網址
+const API_BASE_URL = 'https://codesign-api-360608791019.asia-east1.run.app';
+
 // DOM 元素
 let currentModule = null;
+let currentSessionId = null;
 const moduleButtons = document.querySelectorAll('.module-btn');
 const chatMessages = document.getElementById('chatMessages');
 const currentModuleTitle = document.getElementById('current-module');
@@ -63,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 發送按鈕事件（目前禁用）
+    // 發送按鈕事件
     sendButton.addEventListener('click', function() {
-        if (!sendButton.disabled) {
+        if (!sendButton.disabled && currentModule) {
             sendMessage();
         }
     });
@@ -74,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     messageInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            if (!sendButton.disabled) {
+            if (!sendButton.disabled && currentModule) {
                 sendMessage();
             }
         }
@@ -101,6 +105,149 @@ function switchTheme(theme) {
 function loadSavedTheme() {
     const savedTheme = localStorage.getItem('codesign-theme') || 'warm';
     switchTheme(savedTheme);
+}
+
+// 獲取或建立 Session ID
+function getSessionId() {
+    if (!currentSessionId) {
+        currentSessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('codesign-session', currentSessionId);
+    }
+    return currentSessionId;
+}
+
+// 選擇模組功能
+function selectModule(moduleKey) {
+    // 更新按鈕狀態
+    moduleButtons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-module="${moduleKey}"]`).classList.add('active');
+    
+    // 更新當前模組
+    currentModule = moduleKey;
+    const module = moduleInfo[moduleKey];
+    
+    // 更新標題和描述
+    currentModuleTitle.textContent = module.title;
+    moduleDescription.textContent = module.description;
+    
+    // 如果是 Empathy Lab，啟用真實功能
+    if (moduleKey === 'empathy') {
+        initializeEmpathyLab();
+    } else {
+        // 其他模組顯示開發中
+        showDevelopmentMessage(module);
+    }
+}
+
+// 初始化 Empathy Lab
+function initializeEmpathyLab() {
+    // 清空對話區域
+    chatMessages.innerHTML = `
+        <div class="welcome-message">
+            <div class="message-content">
+                <h3>🎭 同理心實驗室</h3>
+                <p>歡迎來到同理心實驗室！我是您的用戶體驗研究助手。</p>
+                <p>我可以幫助您深入了解目標用戶的需求、痛點和期望，建立用戶畫像和情境分析。</p>
+                <p>請告訴我您想要分析的用戶問題或情境！</p>
+            </div>
+        </div>
+    `;
+    
+    // 啟用輸入功能
+    messageInput.disabled = false;
+    sendButton.disabled = false;
+    messageInput.placeholder = '描述您想要分析的用戶問題...';
+    messageInput.focus();
+}
+
+// 發送訊息到 AI
+async function sendMessage() {
+    const message = messageInput.value.trim();
+    if (!message || !currentModule) return;
+    
+    // 顯示用戶訊息
+    addMessage(message, true);
+    messageInput.value = '';
+    
+    // 顯示載入狀態
+    showLoadingMessage();
+    
+    try {
+        // 發送到後端 API
+        const response = await fetch(`${API_BASE_URL}/api/chat/${currentModule}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sessionId: getSessionId(),
+                message: message
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        // 移除載入訊息並顯示 AI 回應
+        removeLoadingMessage();
+        addMessage(result.response, false);
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        removeLoadingMessage();
+        addMessage('抱歉，發生了錯誤。請稍後再試。', false, true);
+    }
+}
+
+// 添加訊息到聊天區域
+function addMessage(content, isUser = false, isError = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user-message' : 'ai-message'}`;
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    
+    if (isError) {
+        messageContent.style.backgroundColor = 'var(--accent-light)';
+        messageContent.style.color = 'var(--accent-primary)';
+        messageContent.style.border = '1px solid var(--accent-primary)';
+    }
+    
+    messageContent.textContent = content;
+    messageDiv.appendChild(messageContent);
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// 顯示載入訊息
+function showLoadingMessage() {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'chat-message ai-message loading-message';
+    loadingDiv.innerHTML = `
+        <div class="message-content">
+            <div class="loading-indicator">
+                <span>AI 正在思考中</span>
+                <div class="loading-dots">
+                    <span>.</span><span>.</span><span>.</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// 移除載入訊息
+function removeLoadingMessage() {
+    const loadingMessage = document.querySelector('.loading-message');
+    if (loadingMessage) {
+        loadingMessage.remove();
+    }
 }
 
 // 選擇模組功能
