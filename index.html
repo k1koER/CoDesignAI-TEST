@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoDesignAI - 生成式AI輔助設計思維共創系統</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 主題切換器 -->
+        <div class="theme-switcher">
+            <button class="theme-btn active" data-theme="warm" title="暖陽主題">🌅</button>
+            <button class="theme-btn" data-theme="minimal" title="簡約主題">🖤</button>
+            <button class="theme-btn" data-theme="nature" title="深邃主題">🌙</button>
+        </div>
+
+        <!-- 左側模組選擇區域 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>CoDesignAI</h1>
+                <p>生成式AI輔助設計思維共創系統</p>
+            </div>
+            
+            <div class="modules">
+                <h3>設計思維模組</h3>
+                <div class="module-list">
+                    <button class="module-btn" data-module="empathy">
+                        <span class="module-name">同理心實驗室</span>
+                        <span class="module-name-en">Empathy Lab</span>
+                    </button>
+                    
+                    <button class="module-btn" data-module="define">
+                        <span class="module-name">問題定義生成器</span>
+                        <span class="module-name-en">HMW Generator</span>
+                    </button>
+                    
+                    <button class="module-btn" data-module="ideate">
+                        <span class="module-name">創意發想風暴</span>
+                        <span class="module-name-en">Idea Stormer</span>
+                    </button>
+                    
+                    <button class="module-btn" data-module="prototype">
+                        <span class="module-name">原型建構器</span>
+                        <span class="module-name-en">Prototype Builder</span>
+                    </button>
+                    
+                    <button class="module-btn" data-module="track">
+                        <span class="module-name">互動歷程追蹤</span>
+                        <span class="module-name-en">Interaction Tracker</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要對話區域 -->
+        <div class="main-chat">
+            <div class="chat-header">
+                <h2 id="current-module">歡迎使用 CoDesignAI</h2>
+                <p id="module-description">請選擇左側的設計思維模組開始使用</p>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-message">
+                    <div class="message-content">
+                        <h3>🎨 歡迎來到 CoDesignAI</h3>
+                        <p>這是一個專為大學生設計的AI輔助創作系統，結合設計思維流程，幫助您更好地完成專題創作。</p>
+                        <p>請點擊左側的模組開始探索各個功能！</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="輸入訊息..."
+                        rows="1"
+                        disabled
+                    ></textarea>
+                    <button id="sendButton" disabled>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-hint">
+                    <p>💡 選擇模組後即可開始對話</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+/* CSS 變數定義 - 主題配色 */
+:root {
+    /* 暖陽主題 (奶茶米色風格) */
+    --bg-primary: #f5f1e8;
+    --bg-secondary: #faf7f0;
+    --bg-tertiary: #f0ead7;
+    --bg-accent: #e8ddc7;
+    --border-light: #e0d5bd;
+    --border-medium: #d4c4a0;
+    --text-primary: #3c3530;
+    --text-secondary: #5a4f47;
+    --text-muted: #8b7355;
+    --accent-primary: #a67c52;
+    --accent-hover: #8b6239;
+    --accent-light: #f0ead7;
+    --shadow-light: rgba(166, 124, 82, 0.1);
+    --shadow-medium: rgba(60, 53, 48, 0.06);
+}
+
+[data-theme="minimal"] {
+    /* 簡約主題 */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f1f3f4;
+    --bg-accent: #e8eaed;
+    --border-light: #e8eaed;
+    --border-medium: #dadce0;
+    --text-primary: #202124;
+    --text-secondary: #5f6368;
+    --text-muted: #9aa0a6;
+    --accent-primary: #1a73e8;
+    --accent-hover: #1557b0;
+    --accent-light: #e8f0fe;
+    --shadow-light: rgba(0, 0, 0, 0.04);
+    --shadow-medium: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="nature"] {
+    /* 深邃主題 (ChatGPT深色風格) */
+    --bg-primary: #212121;
+    --bg-secondary: #2f2f2f;
+    --bg-tertiary: #404040;
+    --bg-accent: #505050;
+    --border-light: #404040;
+    --border-medium: #505050;
+    --text-primary: #ececec;
+    --text-secondary: #c5c5c5;
+    --text-muted: #8e8ea0;
+    --accent-primary: #10a37f;
+    --accent-hover: #0d8a6b;
+    --accent-light: #1a4d3a;
+    --shadow-light: rgba(16, 163, 127, 0.15);
+    --shadow-medium: rgba(0, 0, 0, 0.3);
+}
+
+/* 全域設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: all 0.3s ease;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: var(--bg-secondary);
+    position: relative;
+}
+
+/* 主題切換器 */
+.theme-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+    background: var(--bg-secondary);
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px var(--shadow-light);
+}
+
+.theme-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.theme-btn:hover {
+    background: var(--bg-tertiary);
+    transform: scale(1.1);
+}
+
+.theme-btn.active {
+    background: var(--accent-primary);
+    box-shadow: 0 2px 8px var(--shadow-medium);
+}
+
+.theme-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+}
+
+/* 左側邊欄 */
+.sidebar {
+    width: 320px;
+    background: var(--bg-tertiary);
+    border-right: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+}
+
+.logo h1 {
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.logo p {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/* 模組選擇區域 */
+.modules {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.modules h3 {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-left: 4px;
+}
+
+.module-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.module-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+}
+
+.module-btn:hover {
+    background: var(--bg-accent);
+    border-color: var(--border-medium);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--shadow-light);
+}
+
+.module-btn.active {
+    background: var(--accent-light);
+    border-color: var(--accent-primary);
+    box-shadow: 0 2px 8px var(--shadow-medium);
+}
+
+.module-name {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.module-name-en {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/* 主要對話區域 */
+.main-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+}
+
+.chat-header {
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+}
+
+.chat-header h2 {
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.chat-header p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* 對話訊息區域 */
+.chat-messages {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    background: var(--bg-secondary);
+}
+
+.welcome-message {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.message-content {
+    background: var(--bg-tertiary);
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+}
+
+.message-content h3 {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.message-content p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+.message-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* 開發中訊息 */
+.development-message {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dev-content {
+    background: var(--bg-accent);
+    border: 1px solid var(--border-medium);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.dev-content .module-title {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.dev-content .dev-status {
+    color: var(--accent-primary);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding: 6px 12px;
+    background: var(--accent-light);
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.dev-content .feature-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.dev-content .feature-description strong {
+    color: var(--text-primary);
+}
+
+/* 輸入區域 */
+.chat-input-area {
+    padding: 16px 24px 24px 24px;
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+}
+
+.input-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+#messageInput:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+#messageInput:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+#sendButton {
+    padding: 10px;
+    background: var(--accent-light);
+    border: 1px solid var(--accent-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+}
+
+#sendButton:hover:not(:disabled) {
+    background: var(--accent-primary);
+    transform: scale(1.05);
+}
+
+#sendButton:disabled {
+    background: var(--bg-tertiary);
+    border-color: var(--border-light);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+#sendButton svg {
+    color: var(--accent-primary);
+}
+
+#sendButton:hover:not(:disabled) svg {
+    color: var(--bg-secondary);
+}
+
+#sendButton:disabled svg {
+    color: var(--text-muted);
+}
+
+.input-hint {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.input-hint p {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* 滾動條樣式 */
+.chat-messages::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
